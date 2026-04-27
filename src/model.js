@@ -1,6 +1,7 @@
+// src/model.js
 
-export async function getSuggestionsFromText(text) {
-  if (!text || text.trim() === "") {
+export async function getSuggestionsFromText(inputSoFar) {
+  if (!inputSoFar || inputSoFar.trim() === "") {
     return [];
   }
 
@@ -10,7 +11,7 @@ export async function getSuggestionsFromText(text) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ inputSoFar }),
     });
 
     if (!response.ok) {
@@ -20,7 +21,6 @@ export async function getSuggestionsFromText(text) {
 
     const data = await response.json();
 
-    // Expecting: { suggestions: [...] }
     if (!data || !Array.isArray(data.suggestions)) {
       console.error("Model API returned unexpected format:", data);
       return [];
